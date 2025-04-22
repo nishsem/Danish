@@ -114,29 +114,29 @@ medusa -h 192.168.43.137 -u msfadmin -P /usr/share/wordlists/password.txt -M ssh
    - Go to `http://192.168.43.137/`
    - Click on **DVWA**
 
-![image](https://github.com/user-attachments/assets/a99c9620-af95-404b-a6ce-427a2160684c)
+![alt text](screenshots/web.png)
 
    - Login using the default credentials:
      - **Username:** `admin`
      - **Password:** `password`
     
-![image](https://github.com/user-attachments/assets/19f24102-768e-4415-8c7d-c189121b4220)
+![alt text](screenshots/login.png)
 
    - Navigate to **DVWA Security** → Set **Security Level** to **Low**
 
-![image](https://github.com/user-attachments/assets/953a1295-dab6-4920-ae5a-f94193eac92d)
+![alt text](screenshots/security.png)
 
 2. **Navigate to Brute Force Page:**
    - Go to **Brute Force**
 
-![image](https://github.com/user-attachments/assets/43c59070-1e50-46f4-9b4b-05decae6322e)
+![alt text](screenshots/bruteforce.png)
 
    - This is a page with a form to enter **username** and **password** to brute-force a login system.
 
 3. **Intercept with Burp Suite:**
    - Set your browser to use Burp's proxy.
 
-![image](https://github.com/user-attachments/assets/14422fb8-712b-4380-a4bd-3d4276193f59)
+![alt text](screenshots/proxy.png)
 
    - open burpsuite and turn on intercept option
 
