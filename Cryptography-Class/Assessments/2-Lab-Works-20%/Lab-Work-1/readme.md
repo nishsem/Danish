@@ -33,7 +33,7 @@ To explore vulnerabilities in common network protocols (FTP, TELNET, SSH, HTTP) 
 nmap -sV -p 21,23,22,80 192.168.43.137
 ```
 
-![image](https://github.com/user-attachments/assets/6d091b5a-a442-4d59-abbb-2ccec9e510b0)
+![alt text](image.png)
 
 ```bash
 enum4linux -a 192.168.43.137
