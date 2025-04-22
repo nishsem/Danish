@@ -140,26 +140,26 @@ medusa -h 192.168.43.137 -u msfadmin -P /usr/share/wordlists/password.txt -M ssh
 
    - open burpsuite and turn on intercept option
 
-![image](https://github.com/user-attachments/assets/3aeaf266-46f7-47ba-b2f9-00c536421afb)
+![alt text](screenshots/turnon.png)
 
    - Fill in sample credentials (e.g., `admin:1234`) and submit the form.
    - Burp will intercept the POST request.
 
-![image](https://github.com/user-attachments/assets/468ec129-d198-48e8-9369-3f9a1ceb6e62)
+![alt text](screenshots/dummy.png)
 
 4. **Send to Intruder:**
    - Right-click the intercepted request → **Send to Intruder**
 
-![image](https://github.com/user-attachments/assets/eb905850-3271-4e17-a564-f5b683ab9c54)
+![alt text](screenshots/sendtointruder.png)
 
    - Set the attack type to **Cluster Bomb**
 
-![image](https://github.com/user-attachments/assets/9f3d8bba-3344-48d1-b655-77f4f7643970)
+![alt text](screenshots/clusterbomb.png)
 
 5. **Set Payload Positions:**
    - In the request:
 
-![image](https://github.com/user-attachments/assets/84b76575-1742-4088-89b5-4c15dedf074e)
+![alt text](screenshots/position.png)
 
 ```bash
 GET /dvwa/vulnerabilities/brute/?username=admin&password=123&Login=Login HTTP/1.1
@@ -171,17 +171,17 @@ GET /dvwa/vulnerabilities/brute/?username=admin&password=123&Login=Login HTTP/1.
 5. **Load Password Wordlist:**
    - Load username and password list in **Payload Options**
 
-![image](https://github.com/user-attachments/assets/01899074-cc35-4957-bf7a-839068202f25)
+![alt text](screenshots/userpayload.png)
 
 
-![image](https://github.com/user-attachments/assets/da4c4e51-2ed5-4047-ba62-0094e19a0eb3)
+![alt text](screenshots/passpayload.png)
 
 6. **Launch Attack:**
    - Click **Start Attack**
    - Look through the results for a request with a noticeably **larger content length**.
    - This indicates a different (likely successful) response compared to the others.
 
-![image](https://github.com/user-attachments/assets/4e197ec6-6935-4dce-b8c1-7ce8955382b6)
+![alt text](screenshots/attack.png)
 
 ---
 
@@ -193,15 +193,15 @@ GET /dvwa/vulnerabilities/brute/?username=admin&password=123&Login=Login HTTP/1.
   3. Copy the temporary URL provided by Burp.
   4. Paste the URL into your browser.
 
-![image](https://github.com/user-attachments/assets/4b330a2f-2821-48d0-a296-d59b40e176b7)
+![alt text](screenshots/response.png)
 
-![image](https://github.com/user-attachments/assets/f85005d9-de50-4c18-91f2-dc809597d9b2)
+![alt text](screenshots/copyresponse.png)
 
 - **Expected Output:**
   You should see the message:  
   > **Welcome to the password protected area admin**
 
-![image](https://github.com/user-attachments/assets/cd1ae582-2e05-4d24-9c23-05a1f6f7fe67)
+![alt text](screenshots/welcome.png)
 
 ---
 ## 3. Sniffing and Traffic Analysis
