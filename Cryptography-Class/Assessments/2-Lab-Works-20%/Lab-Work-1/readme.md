@@ -70,7 +70,7 @@ hydra -l msfadmin -P /usr/share/wordlists/password.txt ftp://192.168.43.137
 ```
  **Valid Credentials Found:**
  
-![image](https://github.com/user-attachments/assets/67c69495-67fd-43a3-ab64-b01b7925da10)
+![alt text](screenshots/ftp.png)
 
 - **TELNET Brute Force**
 
@@ -84,7 +84,7 @@ hydra -l msfadmin -P /usr/share/wordlists/password.txt ftp://192.168.43.137
 hydra -l msfadmin -P /usr/share/wordlists/password.txt telnet://192.168.43.137
 ```
  **Valid Credentials Found:**
- ![image](https://github.com/user-attachments/assets/66a3a2bb-a32f-4800-a680-4827bd10f93a)
+ ![alt text](screenshots/telnet.png)
 
 - **SSH Brute Force**
 
@@ -99,7 +99,7 @@ medusa -h 192.168.43.137 -u msfadmin -P /usr/share/wordlists/password.txt -M ssh
 ```
  **Valid Credentials Found:**
  
- ![image](https://github.com/user-attachments/assets/b1f433be-8c77-45f9-bc40-05d92186c266)
+![alt text](screenshots/ssh.png)
 
 ## 2.2 HTTP Brute Force
 
