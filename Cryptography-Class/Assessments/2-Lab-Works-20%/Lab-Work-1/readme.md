@@ -40,7 +40,7 @@ enum4linux -a 192.168.43.137
 ```
 **Username Found:**
 
-![image](https://github.com/user-attachments/assets/43634cc6-0f64-4e6c-9266-0fb8b6bc5441)
+![alt text](screenshots/enum4linux.png)
 
 **Result:**  
 The output from `enum4linux` revealed the following username:
