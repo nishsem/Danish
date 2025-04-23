@@ -76,13 +76,16 @@ I found a users table and ran:
 SELECT * FROM users;
 ```
 
+Result:
+The query returned several users, and some had extremely weak or reused password hashes. Here's the table content:
+
 ![alt text](screenshots/users.png)
 
-**Findings:**
+**Authentication Flaws Noted:**
 
-- Users had password hashes in the `users` table.
+- Reuse of weak passwords (admin and smithy both use "password")
  
-- The hashes looked weak (MD5).
+- Use of MD5, which is deprecated and insecure
  
-- This is a problem because MD5 is old and easy to crack.
+- Potential use of default credentials
    
