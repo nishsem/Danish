@@ -88,4 +88,49 @@ The query returned several users, and some had extremely weak or reused password
 - Use of MD5, which is deprecated and insecure
  
 - Potential use of default credentials
-   
+
+**Is accessing a database with no password a cryptographic failure?**  
+Yes. Allowing access to a database without a password bypasses any form of cryptographic authentication. Authentication is a core part of secure systems, and passwords (when properly hashed and stored) are a form of cryptographic defense. No password = no defense.
+
+**How does this violate secure cryptographic authentication principles?**  
+
+- No Authentication Layer: Without a password, there's no cryptographic operation (like hashing, key exchange, or encryption) to verify identity.
+
+- Breaks Confidentiality: Anyone can access sensitive data without needing to break encryption or brute force credentials.
+
+- Violates "Defense in Depth": A secure system has multiple layers of protection (firewalls, credentials, encryption). Skipping passwords removes a critical layer.
+
+### 3. Password Hash Discovery and Hash Identification
+
+I explored the tables in the database and found one that had password hashes. Example hash:
+```
+0d107d09f5bbe40cade3de5c71e9e9b7
+```
+Tool Used: `hash-identifier`
+
+![alt text](screenshots/hashid.png)
+
+> *It identified the hash as an MD5 hash.*
+
+**What cryptographic weaknesses exist in this hashing method?**
+
+The hashes use the MD5 hashing algorithm, which has these weaknesses:
+- Fast and Easy to Brute Force: Tools like John or Hashcat can quickly crack it.
+- Collision Vulnerability: Two different inputs can generate the same hash.
+- No Salt Used: Without a salt, it’s easy to use rainbow tables.
+- Outdated: MD5 has been broken for years and is not secure anymore.
+
+### 4. Offline Hash Cracking
+
+I used John the Ripper to crack the password hashes:
+
+Step 1: Save hashes to a file:
+```
+echo "0d107d09f5bbe40cade3de5c71e9e9b7" > hashes.txt
+```
+
+Step 2: Run John:
+```
+john --format=raw-md5 hashes.txt
+```
+
