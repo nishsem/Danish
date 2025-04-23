@@ -131,10 +131,23 @@ echo "0d107d09f5bbe40cade3de5c71e9e9b7" > hashes.txt
 
 Step 2: Crack it with John the Ripper:
 ```
-john --format=raw-md5 hashes.txt
+john --format=raw-md5 --wordlist=/usr/share/wordlists/rockyou.txt hashes.txt
 ```
+Explanation of Commands:
+- `john`: This launches John the Ripper, a powerful password cracking tool.
+- `--format=raw-md5`: Tells John that the hashes are plain (unsalted) MD5 hashes. This format must match the type of hash, or John won't crack them correctly.
+- `--wordlist=/usr/share/wordlists/rockyou.txt`: Specifies the rockyou.txt wordlist, a popular dictionary of common passwords used in real-world attacks.
+- `hashes.txt`: The file that contains the extracted MD5 hashes from the database.
+
+> This command compares each hash in hashes.txt to hashes generated from the words in the rockyou.txt file. If a match is found, the password is considered cracked.
 
 Step 3: Show cracked password:
 ```
 john --show --format=raw-md5 hashes.txt
 ```
+Explanation of Commands:
+- This command displays the already cracked passwords.
+- John saves cracked passwords to a file called john.pot. If you've cracked them before, this command will show the username:password pairs without cracking them again.
+
+![alt text](screenshots/cracked_pass.png)
+
