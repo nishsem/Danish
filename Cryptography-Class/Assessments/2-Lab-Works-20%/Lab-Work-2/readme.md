@@ -1,12 +1,9 @@
 # Lab 2: Cracking Weak Password Hashes & Exploiting Poor Authentication
 
-## Name: Ahmad Danish Haikal Bin Abdullah
+**Time Allocated:** 3 Hours
+**Total Marks:** 15
 
-## Date: April 13
-
-## Total Marks: 15
-
-* * *
+---
 
 ## 1. Service Enumeration and Initial Access
 
