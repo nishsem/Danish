@@ -160,4 +160,3 @@ Explanation of Commands:
 | Weak Hash Algorithm (MD5)    | User passwords stored using outdated MD5 hashing                                | Use stronger hashing like bcrypt, scrypt, or Argon2 with salting|
 | Easy-to-Crack Passwords      | Cracked passwords like `password` using wordlist (`rockyou.txt`)               | Enforce password complexity and minimum length policy|
 | No Encryption in Transit     | Possible plaintext password transmission (check with Wireshark)                | Use SSL/TLS to encrypt communication between client and server|
-| Outdated Software (DVWA)     | Metasploitable2 uses old, vulnerable database software                          | Update database software and regularly patch systems|
