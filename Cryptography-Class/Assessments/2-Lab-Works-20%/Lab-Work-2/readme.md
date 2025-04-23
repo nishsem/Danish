@@ -153,7 +153,6 @@ Explanation of Commands:
 
 ### 5. Cryptographic Analysis and Mitigation
 
-### Task 5: Cryptographic Analysis and Mitigation
 
 | **Issue**                     | **Description**            | **Mitigation**                                                                 |
 |------------------------------ |----------------------------|--------------------------------------------------------------------------------|
