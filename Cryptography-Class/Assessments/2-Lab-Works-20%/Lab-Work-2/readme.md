@@ -129,8 +129,12 @@ Step 1: Save hashes to a file:
 echo "0d107d09f5bbe40cade3de5c71e9e9b7" > hashes.txt
 ```
 
-Step 2: Run John:
+Step 2: Crack it with John the Ripper:
 ```
 john --format=raw-md5 hashes.txt
 ```
 
+Step 3: Show cracked password:
+```
+john --show --format=raw-md5 hashes.txt
+```
