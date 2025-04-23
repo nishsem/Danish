@@ -55,20 +55,28 @@ After connecting, I used this command to list the databases:
 SHOW DATABASES;
 ```
 
+![alt text](screenshots/show_databases.png)
+
 Then I selected the dvwa database:
 ```
 USE dvwa;
 ```
+
+![alt text](screenshots/select_dvwa.png)
 
 I listed the tables:
 ```
 SHOW TABLES;
 ```
 
+![alt text](screenshots/show_tables.png)
+
 I found a users table and ran:
 ```
 SELECT * FROM users;
 ```
+
+![alt text](screenshots/users.png)
 
 **Findings:**
 
