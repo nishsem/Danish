@@ -18,6 +18,24 @@
 
 ### 1. Service Enumeration and Initial Access
 
+**Nmap Scan on Target Machine**
+
+To discover open services on the Metasploitable2 target machine (`192.168.43.137`), I used a version scan with `nmap`.  
+Command Used:
+```
+nmap -sV 192.168.43.137
+```
+
+Scan Results:
+
+![alt text](screenshots/nmap.png)
+
+> MySQL service is running on port 3306/tcp, and it's using version MySQL 5.0.51a-3ubuntu5.
+
+> Other database services like PostgreSQL (5432) are also present.
+
+Next Step: Try connecting to the MySQL service using a default user or without a password
+
 **Problem Faced:**  
 When I tried to connect to the database using:
 
