@@ -88,7 +88,7 @@ openssl enc -aes-256-cbc -d -in encrypted_message.bin -out mesejrahsia.txt -pass
 
 > - Output should match the original
 
-5. See how Raja verify [here](https://github.com/Ha1qal/Raja-Haiqal/blob/master/Cryptography-Class/Assessments/Lab%20Works/Lab%203/screenshots/decrypttask1.png)
+5. See how Raja verify [here](https://github.com/Ha1qal/Raja-Haiqal/blob/master/Cryptography-Class/Assessments/Lab%20Works/Lab%203/readme.md#-task-1-symmetric-encryption-and-decryption-using-aes-256-cbc)
 
 **Result Analysis:**
 - The original and decrypted files are identical, demonstrating that symmetric encryption with AES-256-CBC using a strong random key works as expected.
