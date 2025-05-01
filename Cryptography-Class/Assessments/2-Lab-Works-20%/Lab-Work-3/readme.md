@@ -241,3 +241,21 @@ Output:
 ```mathematica
 Verification Failure
 ```
+
+<details>
+<summary>Screenshot</summary>
+<br>
+
+![alt text](<screenshots/fail.jpg>)
+**You'll see "Verification Failure" because the document has changed, but the signature was created for the original document**
+</details>
+
+---
+
+**Result Analysis:**  
+Digital signatures confirm:
+- The file is from Raja (authenticity)
+
+- The file hasn’t been changed (integrity)
+
+This demonstrates how digital signatures ensure both authentication (it was signed by the private key holder) and integrity (the document hasn't changed since signing). These cryptographic operations form the foundation of modern secure communications and data protection systems.
