@@ -25,9 +25,9 @@ By the end of this lab, we will be able to:
 - Google Drive (for sending files to each other)
 
 ### Task 1: Symmetric Encryption and Decryption using AES-256-CBC
-**Goal:** Encrypt a message using a shared key (symmetric encryption) and then decrypt it with the same key.
-
 **Scenario:** Danish wants to send a confidential message to Raja using symmetric encryption.
+
+**Goal:** Encrypt a message using a shared key (symmetric encryption) and then decrypt it with the same key.
 
 **Commands:**
 1. Danish generate a strong random key
@@ -84,16 +84,22 @@ openssl enc -aes-256-cbc -salt -in message.txt -out encrypted_message.bin -pass 
 ```bash
 openssl enc -aes-256-cbc -d -in encrypted_message.bin -out mesejrahsia.txt -pass file:$PWD/key.bin
 ```
-> - d: Decrypt mode
+> - `d` : Decrypt mode
 
 > - Output should match the original
 
 5. See how Raja verify [here](https://github.com/Ha1qal/Raja-Haiqal/blob/master/Cryptography-Class/Assessments/Lab%20Works/Lab%203/screenshots/decrypttask1.png)
 
 **Result Analysis:**
-This demonstrates how symmetric encryption works using AES-256. Both sender and receiver need the same secret key, which makes key distribution tricky in real life.
+- The original and decrypted files are identical, demonstrating that symmetric encryption with AES-256-CBC using a strong random key works as expected.
+
+- This demonstrates how symmetric encryption works using AES-256. Both sender and receiver need the same secret key, which makes key distribution tricky in real life.
+
+> Security Note: CBC mode is vulnerable to certain attacks. For production, use authenticated modes like GCM
 
 ### Task 2: Asymmetric Encryption and Decryption using RSA
+**Scenario:** Raja wants to securely receive messages from Danish using RSA public-key cryptography.
+
 **Goal:** Use RSA to encrypt a message with Raja's public key and decrypt with his private key (asymmetric encryption).
 
 **Commands:**:  
@@ -143,7 +149,11 @@ openssl rsautl -decrypt -inkey raja_private.pem -in rahsia.enc -out rahsia_decry
 Details [here](https://github.com/Ha1qal/Raja-Haiqal/blob/master/Cryptography-Class/Assessments/Lab%20Works/Lab%203/screenshots/rsadecrypt.png).
 
 **Result Analysis:**
-RSA solves the key distribution problem because Danish can encrypt with Raja’s public key and only Raja can decrypt it with his private key.
+- RSA solves the key distribution problem because Danish can encrypt with Raja’s public key and only Raja can decrypt it with his private key.
+
+- The decrypted message matches the original, confirming correct use of RSA for secure communication.
+
+> Security Note: RSA is computationally expensive and not suitable for large files.
 
 ### Task 3: Hashing and Message Integrity using SHA-256
 **Goal:** Show how hashes detect any file tampering.
@@ -259,3 +269,25 @@ Digital signatures confirm:
 - The file hasn’t been changed (integrity)
 
 This demonstrates how digital signatures ensure both authentication (it was signed by the private key holder) and integrity (the document hasn't changed since signing). These cryptographic operations form the foundation of modern secure communications and data protection systems.
+
+> Security Note: Digital signatures are crucial for non-repudiation and tamper detection
+
+### Problems Encountered & Troubleshooting
+- Command Syntax Errors: Misplaced flags (e.g., `-in` vs. `-inkey`) caused errors. Resolved via `man openssl` and Google/Stack Overflow
+
+- File not found errors: Resolved by checking file paths
+
+- Understanding Parameters: Confusion over `-pass` vs. `-passin`. Resolved by reading OpenSSL documentation and tutorials.
+
+### Summary of Findings
+* Symmetric encryption (AES-256-CBC) is fast and suitable for large data, but key management is critical.
+
+* Asymmetric encryption (RSA) is ideal for secure key exchange and small data but not efficient for large files.
+
+* Hashing (SHA-256) provides strong integrity checks because even minor changes in data result in drastically different hashes.
+
+* Digital signatures combine hashing and asymmetric encryption to ensure authenticity and integrity.
+
+* Concepts clarified: AES vs RSA, hashing vs encryption, signing vs verifying
+
+* Troubleshooting relied on OpenSSL documentation, man pages, and community forums also AI :) .
