@@ -19,14 +19,15 @@ By the end of this lab, we will be able to:
 
 ## B. Lab Tasks:
 
+**Tools Used:**
+- OpenSSL (command line)
+- Linux shell utilities (echo, cat, diff)
+- Google Drive (for sending files to each other)
+
 ### Task 1: Symmetric Encryption and Decryption using AES-256-CBC
 **Goal:** Encrypt a message using a shared key (symmetric encryption) and then decrypt it with the same key.
 
 **Scenario:** Danish wants to send a confidential message to Raja using symmetric encryption.
-
-**Tools Used:**
-- OpenSSL (command line)
-- Linux shell utilities (echo, cat, diff)
 
 **Commands:**
 1. Danish generate a strong random key
@@ -34,19 +35,32 @@ By the end of this lab, we will be able to:
 openssl rand -hex 32 > key.bin
 ```
 > `rand` -hex 32: Generates 32 random bytes in hex (256 bits) — used as AES key.
+<details>
+<summary>Screenshots</summary>
+<br>
 
 ![alt text](<screenshots/generate_key.jpg>)
 
 ![alt text](<screenshots/key.jpg>)
+</details>
+
+---
 
 2. Create a plaintext message
 ```bash
 echo "Hello, this is a secret message from Danish." > message.txt
 ```
 
-![alt text](<screenshots/message.jpg>)
+<details>
+<summary>Screenshot</summary>
+<br>
 
-3. Encrypt using AES-256-CBC
+![alt text](<screenshots/message.jpg>)
+</details>
+
+---
+
+3. Danish encrypt using AES-256-CBC
 ```bash
 openssl enc -aes-256-cbc -salt -in message.txt -out encrypted_message.bin -pass file:./key.bin
 ```
@@ -57,10 +71,16 @@ openssl enc -aes-256-cbc -salt -in message.txt -out encrypted_message.bin -pass 
 > - `salt` : Adds salt to prevent dictionary attacks
 
 > - `pass file` : ./key.bin: Reads key from file
+<details>
+<summary>Screenshot</summary>
+<br>
 
 ![alt text](<screenshots/aes_enctrypted.jpg>)
+</details>
 
-4. Raja decrypt it back
+---
+
+4. Raja got the fle from Danish and decrypt it back
 ```bash
 openssl enc -aes-256-cbc -d -in encrypted_message.bin -out mesejrahsia.txt -pass file:$PWD/key.bin
 ```
@@ -69,6 +89,9 @@ openssl enc -aes-256-cbc -d -in encrypted_message.bin -out mesejrahsia.txt -pass
 > - Output should match the original
 
 5. See how Raja verify [here](https://github.com/Ha1qal/Raja-Haiqal/blob/master/Cryptography-Class/Assessments/Lab%20Works/Lab%203/screenshots/decrypttask1.png)
+
+**Result Analysis:**
+This demonstrates how symmetric encryption works using AES-256. Both sender and receiver need the same secret key, which makes key distribution tricky in real life.
 
 ### Task 2: Asymmetric Encryption and Decryption using RSA
 **Goal:** Use RSA to encrypt a message with Raja's public key and decrypt with his private key (asymmetric encryption).
@@ -90,14 +113,28 @@ openssl rsa -pubout -in raja_private.pem -out raja_public.pem
 echo "This is a private message for Danish from Raja." > rahsia.txt
 ```
 
-![alt text](<screenshots/rahsia.jpg>)
+<details>
+<summary>Screenshot</summary>
+<br>
+
+![alt text](<screenshots/aes_enctrypted.jpg>)
+</details>
+
+---
 
 3. Encrypt with Raja's public key
 ```bash
 openssl rsautl -encrypt -inkey danish_public.pem -pubin -in rahsia.txt -out encrypted.bin
 ```
 
+<details>
+<summary>Screenshot</summary>
+<br>
+
 ![alt text](<screenshots/encrypted_rsa.jpg>)
+</details>
+
+---
 
 4. Raja decrypt with his private key:
 ```bash
@@ -138,9 +175,19 @@ Output:
 
 > SHA2-256(integrity1.txt)= `e9fec22e3b60289908f0a7785b0356ab3263806df1593be1b2adc85c5d505abd`
 
+<details>
+<summary>Screenshot</summary>
+<br>
+
 ![alt text](<screenshots/integrity.jpg>)
+</details>
+
+---
 
 Different output, hash changed.
+
+**Result Analysis:**
+Even a 1-character change causes a completely different hash. This proves that hashing helps verify data integrity.
 
 ### Task 4: Digital Signatures using RSA
 **Goal:** Sign a file with Raja's private key, verify it with Raja's public key to confirming authenticity and integrity.
