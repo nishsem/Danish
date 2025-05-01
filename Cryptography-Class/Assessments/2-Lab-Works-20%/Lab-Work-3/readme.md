@@ -202,9 +202,29 @@ echo "This agreement confirms the terms between Danish and Raja." > agreement.tx
 ```bash
 openssl dgst -sha256 -sign raja_private.pem -out agreement.sig agreement.txt
 ```
+> `dgst` : -sha256: Hashing before signing
+
+> `sign` : Signs using the private key
+
+> `agreement.sig` : Signature output
+
 More details [here]()
 
 3. Raja share the agreement and signature with Danish and Danish verifies using Raja’s public key
 ```bash
 openssl dgst -sha256 -verify raja_public.pem -signature agreement.sig agreement.txt
 ```
+Output:
+```shell
+Verified OK
+```
+
+<details>
+<summary>Screenshot</summary>
+<br>
+
+![alt text](<screenshots/verify.jpg>)
+</details>
+
+---
+
