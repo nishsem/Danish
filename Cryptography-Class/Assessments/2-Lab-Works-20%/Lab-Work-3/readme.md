@@ -29,6 +29,8 @@ openssl rand -hex 32 > key.bin
 ```
 > `rand` -hex 32: Generates 32 random bytes in hex (256 bits) — used as AES key.
 
+![alt text](<screenshots/generate_key.jpg>)
+
 2. Create a plaintext message
 ```bash
 echo "Hello, this is a secret message from Danish." > message.txt
