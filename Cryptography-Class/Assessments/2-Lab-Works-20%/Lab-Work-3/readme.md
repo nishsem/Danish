@@ -180,11 +180,10 @@ Output:
 <br>
 
 ![alt text](<screenshots/integrity.jpg>)
+**Different output, hash changed.**
 </details>
 
 ---
-
-Different output, hash changed.
 
 **Result Analysis:**
 Even a 1-character change causes a completely different hash. This proves that hashing helps verify data integrity.
@@ -214,8 +213,9 @@ More details [here]()
 ```bash
 openssl dgst -sha256 -verify raja_public.pem -signature agreement.sig agreement.txt
 ```
+
 Output:
-```shell
+```mathematica
 Verified OK
 ```
 
@@ -224,7 +224,20 @@ Verified OK
 <br>
 
 ![alt text](<screenshots/verify.jpg>)
+**Verified OK → file is authentic & untampered.**
 </details>
 
 ---
 
+4. Danish modify the agreement and he verify again
+```bash
+echo " Altered." >> agreement.txt
+```
+
+```bash
+openssl dgst -sha256 -verify raja_public.pem -signature agreement.sig agreement.txt
+```
+Output:
+```mathematica
+Verification Failure
+```
