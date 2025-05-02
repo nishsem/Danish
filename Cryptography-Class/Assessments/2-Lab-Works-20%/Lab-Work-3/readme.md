@@ -116,9 +116,17 @@ openssl genpkey -algorithm RSA -out raja_private.pem -pkeyopt rsa_keygen_bits:20
 > - `-out raja_private.pem` : Tells OpenSSL to save the generated private key into raja_private.pem
 
 > - `-pkeyopt rsa_keygen_bits:2048` : Sets the key size to 2048 bits, which is a strong and secure length for RSA
+
 ```bash
 openssl rsa -pubout -in raja_private.pem -out raja_public.pem
 ```
+> - `openssl rsa` : Tells OpenSSL you're working with an RSA key
+
+> - `-pubout` : Instructs OpenSSL to output the public key
+
+> = `-in raja_private.pem` : Specifies the input file, which is the private key
+
+> - `-out raja_public.pem` : Specifies the output file for the public key
 
  Here for [details](https://github.com/Ha1qal/Raja-Haiqal/blob/master/Cryptography-Class/Assessments/Lab%20Works/Lab%203/readme.md#commands-executed-1).
 
