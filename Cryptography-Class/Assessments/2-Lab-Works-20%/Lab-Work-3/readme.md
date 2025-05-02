@@ -64,13 +64,13 @@ echo "Hello, this is a secret message from Danish." > message.txt
 ```bash
 openssl enc -aes-256-cbc -salt -in message.txt -out encrypted_message.bin -pass file:./key.bin
 ```
-> - `enc` : Encryption utility
+> - `enc` : Encryption utility.
 
-> - `aes-256-cbc` : Specifies AES with 256-bit key in CBC mode
+> - `aes-256-cbc` : Specifies AES with 256-bit key in CBC mode.
 
-> - `salt` : Adds salt to prevent dictionary attacks
+> - `salt` : Adds salt to prevent dictionary attacks.
 
-> - `pass file` : ./key.bin: Reads key from file
+> - `pass file` : ./key.bin: Reads key from file.
 <details>
 <summary>Screenshot</summary>
 <br>
@@ -84,9 +84,9 @@ openssl enc -aes-256-cbc -salt -in message.txt -out encrypted_message.bin -pass 
 ```bash
 openssl enc -aes-256-cbc -d -in encrypted_message.bin -out mesejrahsia.txt -pass file:$PWD/key.bin
 ```
-> - `d` : Decrypt mode
+> - `d` : Decrypt mode.
 
-> - Output should match the original
+> - Output should match the original.
 
 5. See how Raja verify [here](https://github.com/Ha1qal/Raja-Haiqal/blob/master/Cryptography-Class/Assessments/Lab%20Works/Lab%203/readme.md#commands-executed)
 
@@ -107,26 +107,26 @@ openssl enc -aes-256-cbc -d -in encrypted_message.bin -out mesejrahsia.txt -pass
  ```bash
 openssl genpkey -algorithm RSA -out raja_private.pem -pkeyopt rsa_keygen_bits:2048
 ```
-> - `openssl` : Calling the OpenSSL tool
+> - `openssl` : Calling the OpenSSL tool.
 
-> - `genpkey` : Stands for "generate private key"
+> - `genpkey` : Stands for "generate private key".
 
-> - `-algorithm RSA` : Specifies the algorithm to use – in this case, RSA.
+> - `-algorithm RSA` : Specifies the algorithm to use – in this case, RSA..
 
-> - `-out raja_private.pem` : Tells OpenSSL to save the generated private key into raja_private.pem
+> - `-out raja_private.pem` : Tells OpenSSL to save the generated private key into raja_private.pem.
 
-> - `-pkeyopt rsa_keygen_bits:2048` : Sets the key size to 2048 bits, which is a strong and secure length for RSA
+> - `-pkeyopt rsa_keygen_bits:2048` : Sets the key size to 2048 bits, which is a strong and secure length for RSA.
 
 ```bash
 openssl rsa -pubout -in raja_private.pem -out raja_public.pem
 ```
-> - `openssl rsa` : Tells OpenSSL you're working with an RSA key
+> - `openssl rsa` : Tells OpenSSL you're working with an RSA key.
 
-> - `-pubout` : Instructs OpenSSL to output the public key
+> - `-pubout` : Instructs OpenSSL to output the public key.
 
-> = `-in raja_private.pem` : Specifies the input file, which is the private key
+> - `-in raja_private.pem` : Specifies the input file, which is the private key.
 
-> - `-out raja_public.pem` : Specifies the output file for the public key
+> - `-out raja_public.pem` : Specifies the output file for the public key.
 
  Here for [details](https://github.com/Ha1qal/Raja-Haiqal/blob/master/Cryptography-Class/Assessments/Lab%20Works/Lab%203/readme.md#commands-executed-1).
 
@@ -146,8 +146,19 @@ echo "This is a private message for Danish from Raja." > rahsia.txt
 
 3. Encrypt with Raja's public key
 ```bash
-openssl rsautl -encrypt -inkey danish_public.pem -pubin -in rahsia.txt -out encrypted.bin
+openssl rsautl -encrypt -inkey raja_public.pem -pubin -in rahsia.txt -out encrypted.bin
 ```
+> - `openssl rsautl` : Uses the RSA utility tool.
+
+> - `-encrypt` : Tells OpenSSL to perform encryption.
+
+> - `-inkey raja_public.pem` : Specifies the public key file used to encrypt the data.
+
+> - `-pubin	` : Tells OpenSSL that the input key (-inkey) is a public key.
+
+> - `-in rahsia.txt` : The plaintext input file you want to encrypt.
+
+> - `-out encrypted.bin` : The output file where the encrypted data will be stored.
 
 <details>
 <summary>Screenshot</summary>
@@ -162,6 +173,12 @@ openssl rsautl -encrypt -inkey danish_public.pem -pubin -in rahsia.txt -out encr
 ```bash
 openssl rsautl -decrypt -inkey raja_private.pem -in rahsia.enc -out rahsia_decrypted.txt
 ```
+> - `-decrypt` : Tells OpenSSL to perform decryption using the private key.
+
+> - `-inkey raja_private.pem` : Specifies the private key file (raja_private.pem) to be used for decryption.
+
+> - `-out rahsia_decrypted.txt` : Specifies the output file (rahsia_decrypted.txt) where the decrypted data will be saved.
+
 Details [here](https://github.com/Ha1qal/Raja-Haiqal/blob/master/Cryptography-Class/Assessments/Lab%20Works/Lab%203/readme.md#commands-executed-1).
 
 **Result Analysis:**
@@ -184,6 +201,12 @@ echo "This is an important document from Danish to Raja." > integrity.txt
 ```bash
 openssl dgst -sha256 integrity.txt
 ```
+> - `dgst` : Stands for "digest," which is used for generating cryptographic hash values.
+
+> - `-sha256` : Specifies the hash algorithm to use – in this case, SHA-256.
+
+> - `integrity.txt` : The input file (integrity.txt) for which the SHA-256 hash will be calculated.
+
 Output:
 > SHA2-256(integrity.txt)= `8aca8c9981a01e58d9031e16f404248014d76daba78d3f89f709b66e3855d07f`
 
@@ -227,11 +250,13 @@ echo "This agreement confirms the terms between Danish and Raja." > agreement.tx
 ```bash
 openssl dgst -sha256 -sign raja_private.pem -out agreement.sig agreement.txt
 ```
-> `dgst` : -sha256: Hashing before signing
+> - `dgst` : -sha256: Hashing before signing.
 
-> `sign` : Signs using the private key
+> - `-sign raja_private.pem` :  Signs the hash of the agreement.txt file using the private key stored in raja_private.pem.
 
-> `agreement.sig` : Signature output
+> - `-out agreement.sig` :  Specifies the output file (agreement.sig) where the signature will be saved.
+
+> - `agreement.txt` : The input file whose hash will be signed with the private key
 
 More details [here](https://github.com/Ha1qal/Raja-Haiqal/blob/master/Cryptography-Class/Assessments/Lab%20Works/Lab%203/readme.md#commands-executed-3)
 
