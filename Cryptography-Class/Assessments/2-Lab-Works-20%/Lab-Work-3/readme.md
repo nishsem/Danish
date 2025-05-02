@@ -88,7 +88,7 @@ openssl enc -aes-256-cbc -d -in encrypted_message.bin -out mesejrahsia.txt -pass
 
 > - Output should match the original
 
-5. See how Raja verify [here](https://github.com/Ha1qal/Raja-Haiqal/blob/master/Cryptography-Class/Assessments/Lab%20Works/Lab%203/readme.md#-task-1-symmetric-encryption-and-decryption-using-aes-256-cbc)
+5. See how Raja verify [here](https://github.com/Ha1qal/Raja-Haiqal/blob/master/Cryptography-Class/Assessments/Lab%20Works/Lab%203/readme.md#commands-executed)
 
 **Result Analysis:**
 - The original and decrypted files are identical, demonstrating that symmetric encryption with AES-256-CBC using a strong random key works as expected.
@@ -112,7 +112,7 @@ openssl genpkey -algorithm RSA -out raja_private.pem -pkeyopt rsa_keygen_bits:20
 openssl rsa -pubout -in raja_private.pem -out raja_public.pem
 ```
 
- Here for [details](https://github.com/Ha1qal/Raja-Haiqal/blob/master/Cryptography-Class/Assessments/Lab%20Works/Lab%203/screenshots/createkeyrsa.png).
+ Here for [details](https://github.com/Ha1qal/Raja-Haiqal/blob/master/Cryptography-Class/Assessments/Lab%20Works/Lab%203/readme.md#commands-executed-1).
 
 2. Danish create secret message
 ```bash
@@ -146,7 +146,7 @@ openssl rsautl -encrypt -inkey danish_public.pem -pubin -in rahsia.txt -out encr
 ```bash
 openssl rsautl -decrypt -inkey raja_private.pem -in rahsia.enc -out rahsia_decrypted.txt
 ```
-Details [here](https://github.com/Ha1qal/Raja-Haiqal/blob/master/Cryptography-Class/Assessments/Lab%20Works/Lab%203/screenshots/rsadecrypt.png).
+Details [here](https://github.com/Ha1qal/Raja-Haiqal/blob/master/Cryptography-Class/Assessments/Lab%20Works/Lab%203/readme.md#commands-executed-1).
 
 **Result Analysis:**
 - RSA solves the key distribution problem because Danish can encrypt with Raja’s public key and only Raja can decrypt it with his private key.
@@ -217,7 +217,7 @@ openssl dgst -sha256 -sign raja_private.pem -out agreement.sig agreement.txt
 
 > `agreement.sig` : Signature output
 
-More details [here]()
+More details [here](https://github.com/Ha1qal/Raja-Haiqal/blob/master/Cryptography-Class/Assessments/Lab%20Works/Lab%203/readme.md#commands-executed-3)
 
 3. Raja share the agreement and signature with Danish and Danish verifies using Raja’s public key
 ```bash
@@ -273,11 +273,11 @@ This demonstrates how digital signatures ensure both authentication (it was sign
 > Security Note: Digital signatures are crucial for non-repudiation and tamper detection
 
 ### Problems Encountered & Troubleshooting
-- Command Syntax Errors: Misplaced flags (e.g., `-in` vs. `-inkey`) caused errors. Resolved via `man openssl` and Google/Stack Overflow
-
-- File not found errors: Resolved by checking file paths
-
-- Understanding Parameters: Confusion over `-pass` vs. `-passin`. Resolved by reading OpenSSL documentation and tutorials.
+| Problem Type            | Issue Description                                                | How It Was Resolved                    |
+|-------------------------|------------------------------------------------------------------|----------------------------------------|
+| Command Syntax Errors   | Misplaced flags like `-in` vs. `-inkey` causing execution issues | Used `man openssl`, Google searches, and Stack Overflow to find correct syntax |
+| File Not Found Errors   | Errors due to incorrect or missing file paths                    | Double-checked file locations and ensured correct filenames were used             |
+| Parameter Understanding | Confused between `-pass` and `-passin`                           | Read the official OpenSSL documentation and followed community tutorials             |
 
 ### Summary of Findings
 * Symmetric encryption (AES-256-CBC) is fast and suitable for large data, but key management is critical.
