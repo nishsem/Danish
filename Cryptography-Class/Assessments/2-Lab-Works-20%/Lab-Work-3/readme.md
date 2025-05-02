@@ -20,9 +20,9 @@ By the end of this lab, we will be able to:
 ## B. Lab Tasks:
 
 **Tools Used:**
-- OpenSSL (command line)
-- Linux shell utilities (echo, cat, diff)
-- Google Drive (for sending files to each other)
+- `OpenSSL` (command line)
+- Linux shell utilities (`echo`, `cat`, `diff`)
+- `Google Drive` (for sending files to each other)
 
 ### Task 1: Symmetric Encryption and Decryption using AES-256-CBC
 **Scenario:** Danish wants to send a confidential message to Raja using symmetric encryption.
@@ -107,7 +107,15 @@ openssl enc -aes-256-cbc -d -in encrypted_message.bin -out mesejrahsia.txt -pass
  ```bash
 openssl genpkey -algorithm RSA -out raja_private.pem -pkeyopt rsa_keygen_bits:2048
 ```
+> - `openssl` : Calling the OpenSSL tool
 
+> - `genpkey` : Stands for "generate private key"
+
+> - `-algorithm RSA` : Specifies the algorithm to use – in this case, RSA.
+
+> - `-out raja_private.pem` : Tells OpenSSL to save the generated private key into raja_private.pem
+
+> - `-pkeyopt rsa_keygen_bits:2048` : Sets the key size to 2048 bits, which is a strong and secure length for RSA
 ```bash
 openssl rsa -pubout -in raja_private.pem -out raja_public.pem
 ```
