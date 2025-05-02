@@ -34,7 +34,7 @@ By the end of this lab, we will be able to:
 ```bash
 openssl rand -hex 32 > key.bin
 ```
-> `rand` -hex 32: Generates 32 random bytes in hex (256 bits) — used as AES key.
+> `rand -hex 32`: Generates 32 random bytes in hex (256 bits) — used as AES key.
 <details>
 <summary>Screenshots</summary>
 <br>
