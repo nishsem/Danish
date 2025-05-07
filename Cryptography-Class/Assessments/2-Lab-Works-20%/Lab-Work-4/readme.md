@@ -70,3 +70,136 @@ plaintext = padded_plaintext[:-pad_len]
 
 print("Decrypted:", plaintext.decode())
 ```
+
+**Output:**  
+![alt text](screenshots/aes_decryption.png)
+
+### Task 2: Asymmetric Encryption (RSA)
+What is RSA?  
+RSA is an asymmetric encryption algorithm. "Asymmetric" means two different keys are used: one to encrypt (public key) and one to decrypt (private key).
+
+**Steps:**
+1. Generate RSA keys (Raja will generate them).
+
+2. Encrypt a message with Raja’s public key.
+
+3. Decrypt the message using Raja’s private key.
+
+**rsa_keygen_raja.py**
+```bash
+from Crypto.PublicKey import RSA
+
+# 1. Generate RSA key pair (2048 bits is standard)
+key_pair = RSA.generate(2048)
+
+# 2. Export the private key (keep this secret!)
+private_key = key_pair.export_key()
+with open("raja_private.pem", "wb") as f:
+    f.write(private_key)
+
+# 3. Export the public key (share this with you for encryption)
+public_key = key_pair.publickey().export_key()
+with open("raja_public.pem", "wb") as f:
+    f.write(public_key)
+
+print("RSA key pair generated.")
+```
+
+**Output:** Raja generate RSA keys [here]()
+
+**rsa_encryption.py**
+```bash
+from Crypto.PublicKey import RSA
+from Crypto.Cipher import PKCS1_OAEP
+import base64
+
+# 1. Import Raja's public key (paste it here)
+public_key_str = '''-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1JqRbGfSKHggm4rllcd7
+WnsCa4Pm7y4/4xw01+pNI3gtWXOvLX3xU3E9CdQzU8U7rFG3e8on4D7CleQdDclW
+am92Qn4wcC16oWqwhwrWP3+krvYjKEFx7pMMvvg/Jc/shnyjugNogyN7guhtMsdf
+UDOsxOsk4GN/1iW0oOfrNnm7DrhWMa6yL9lKIjnLr96jZOUSRl7+tld5nRwvsDmL
+cgl5oGM+KMWi6hcsn/lvzGz+i53j74oaI9uAMRtfd5bvaRg6vjUQQun9gp1CdJ0h
+o3+qWDWZqcE0ew7xCpO40sbVwY2B3Y7XAFAp81vPLFalnGVBa70SP7tMVvRDRimJ
+0wIDAQAB
+-----END PUBLIC KEY-----'''
+
+public_key = RSA.import_key(public_key_str)
+
+# 2. Create RSA cipher
+cipher_rsa = PKCS1_OAEP.new(public_key)
+
+# 3. Encrypt message
+message = b"This message is for Raja!"
+ciphertext = cipher_rsa.encrypt(message)
+
+# 4. Encode ciphertext
+print("Encrypted:", base64.b64encode(ciphertext).decode())
+```
+
+**Output:**
+![alt text](screenshots/rsa_encrypted.png)
+> ScA1VOwk5IhOOxCcNwVVM2HJDO2ni6oxAI8lyVXndS5bJSppDKUuQ+fwTVSQQbsaHTJXrXEnStV7EVK/cn1HqGCEmkg+aUZ3I+FY97upXRAaG92Lvh8Zgfy2HN4gZofbcrGvdMlniGAUszP5M2wcjtO4e2IbswKNTf0uaJrUIqZn3eNMFSqArrMAo4eIoAoJ3f61jIkeUTJB8sJHvzVXkVgcjFY7zLlU+sg3Q0FAqm8Ipi6nKQbyx3JPWMub/aZtZpZER11ThEQfw8+xFKBvaiLlG258VajrCReT8dgseYCeDeCpN3JG90uXP35K0aQ6P+sJysjO1UZTDx0cTYp4NA==
+
+**rsa_decryption.py**
+```bash
+from Crypto.PublicKey import RSA
+from Crypto.Cipher import PKCS1_OAEP
+import base64
+
+# 1. Load private key
+private_key_str = '''-----BEGIN PRIVATE KEY-----
+<RAJA'S PRIVATE KEY>
+-----END PRIVATE KEY-----'''
+
+private_key = RSA.import_key(private_key_str)
+
+# 2. Decode ciphertext
+ciphertext = base64.b64decode("<ENCRYPTED MESSAGE>")
+
+# 3. Decrypt
+cipher_rsa = PKCS1_OAEP.new(private_key)
+plaintext = cipher_rsa.decrypt(ciphertext)
+
+print("Decrypted:", plaintext.decode())
+```
+See Raja decrypt [here]()
+
+### Task 3: Hashing (SHA-256)
+What is SHA-256?  
+SHA-256 is a hashing algorithm that generates a fixed-size hash (digest) from any input. It is one-way: you can't get back the original data from the hash.
+
+**Steps:**
+1. Hash a message using SHA-256.
+
+2. Display the hash value.
+
+**hashing.py**
+```bash
+import hashlib
+
+# Input data
+data1 = "hello"
+data2 = "hello world"
+
+# Hash
+hash1 = hashlib.sha256(data1.encode()).hexdigest()
+hash2 = hashlib.sha256(data2.encode()).hexdigest()
+
+print("Hash of data1:", hash1)
+print("Hash of data2:", hash2)
+```
+
+**Output**  
+
+![alt text](screenshots/hashing.png)
+
+### Task 4: Digital Signatures (RSA)
+What is a Digital Signature?  
+A digital signature is used to prove the authenticity of a message. The sender signs the message with their private key, and the recipient can verify it with the sender's public key.
+
+**Steps:**
+1. Sign the message using Raja's private key.
+
+2. Verify the signature using Raja's public key.
+
