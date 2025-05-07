@@ -74,6 +74,8 @@ print("Decrypted:", plaintext.decode())
 **Output:**  
 ![alt text](screenshots/aes_decryption.png)
 
+See details [here](https://github.com/Ha1qal/Raja-Haiqal/blob/master/Cryptography-Class/Assessments/Lab%20Works/Lab%204/lab%204.md#-implementation)
+
 ### Task 2: Asymmetric Encryption (RSA)
 What is RSA?  
 RSA is an asymmetric encryption algorithm. "Asymmetric" means two different keys are used: one to encrypt (public key) and one to decrypt (private key).
