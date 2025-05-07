@@ -46,6 +46,98 @@ print("Key:", base64.b64encode(key).decode())
 print("IV:", base64.b64encode(iv).decode())
 ```
 
+<details>
+<summary>Coding explaination</summary>
+<br>
+
+**Import Libraries:**
+```bash
+from Crypto.Cipher import AES
+from Crypto.Random import get_random_bytes
+import base64
+```
+`from Crypto.Cipher import AES` :  
+We’re using the AES cipher from the pycryptodome library. AES = Advanced Encryption Standard. It’s our main character for encrypting data securely.
+
+`from Crypto.Random import get_random_bytes` :  
+We use this to generate strong random bytes, like for the key and IV. These random values make our encryption secure.
+
+`import base64` :  
+This is for encoding binary data into text (because binary looks like garbage if you print it raw). We’ll use base64 to turn the key, IV, and ciphertext into nice readable strings.
+
+**Step 1: Generate the AES Key**
+```bash
+key = get_random_bytes(32)
+```
+> This generates 32 random bytes (256 bits) = AES-256 key.
+
+**Step 2: Generate IV (Initialization Vector)**
+```bash
+iv = get_random_bytes(16)
+```
+
+> IV = Initialization Vector = extra randomness.
+
+> Always 16 bytes for AES because AES has a block size of 16 bytes.
+
+> It ensures that even if you encrypt the same data twice, you get different results each time.
+
+**Step 3: Create AES Cipher Object**
+```bash
+cipher = AES.new(key, AES.MODE_CBC, iv)
+```
+> We're creating a new AES cipher object.
+
+> AES.new(...) takes 3 things:  
+the key  
+the mode (we're using CBC = Cipher Block Chaining)  
+the iv
+
+> This object will now handle encrypting stuff with the given setup.
+
+**Step 4: Prepare the Plaintext**
+```bash
+plaintext = b"Cryptography Lab by Danish & Raja"
+```
+> This is the message we want to encrypt.
+
+> The b before the string makes it a byte string (since AES works on bytes, not normal text).
+
+**Step 4.1: Pad the Plaintext**
+```bash
+pad_len = 16 - len(plaintext) % 16
+padded_plaintext = plaintext + bytes([pad_len] * pad_len)
+```
+
+> AES needs input in blocks of 16 bytes. So if our message isn’t a perfect multiple of 16, we pad it.
+
+> pad_len calculates how many bytes we need to add.
+
+> bytes([pad_len] * pad_len) creates the padding bytes.
+For example, if we need to add 5 bytes, this becomes: b'\x05\x05\x05\x05\x05'.
+
+> This is called PKCS#7 padding.
+
+**Step 5: Encrypt the Padded Plaintext**
+```bash
+ciphertext = cipher.encrypt(padded_plaintext)
+```
+
+> This line encrypts the padded message using the AES cipher we created.
+
+**Step 6: Encode to Base64 for Sharing**
+```bash
+print("Ciphertext:", base64.b64encode(ciphertext).decode())
+print("Key:", base64.b64encode(key).decode())
+print("IV:", base64.b64encode(iv).decode())
+```
+> base64.b64encode(...): converts binary data to readable text.
+
+> .decode(): turns it into a real string we can print.
+
+> Why base64? So we can safely print, copy, or transmit the ciphertext, key, and IV without them getting corrupted.
+</details>  
+  
 **Output:**  
 ![alt text](screenshots/aes_encryption.png)
 
