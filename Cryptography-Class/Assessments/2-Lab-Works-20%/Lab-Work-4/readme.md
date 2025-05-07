@@ -16,6 +16,7 @@ AES (Advanced Encryption Standard) is a symmetric encryption algorithm. "Symmetr
 
 3. Decrypt the message back to its original form.
 
+**Step 1 & 2: Generate a random key and encrypt a message**  
 **aes_encryption.py**
 ```bash
 from Crypto.Cipher import AES
@@ -48,6 +49,7 @@ print("IV:", base64.b64encode(iv).decode())
 **Output:**  
 ![alt text](screenshots/aes_encryption.png)
 
+**Step 3: Decrypt the message**  
 **aes_decryption.py**
 ```bash
 from Crypto.Cipher import AES
@@ -74,7 +76,7 @@ print("Decrypted:", plaintext.decode())
 **Output:**  
 ![alt text](screenshots/aes_decryption.png)
 
-See details [here](https://github.com/Ha1qal/Raja-Haiqal/blob/master/Cryptography-Class/Assessments/Lab%20Works/Lab%204/lab%204.md#-implementation)
+See details [here](https://github.com/Ha1qal/Raja-Haiqal/blob/master/Cryptography-Class/Assessments/Lab%20Works/Lab%204/lab%204.md#-implementation).
 
 ### Task 2: Asymmetric Encryption (RSA)
 What is RSA?  
@@ -87,6 +89,7 @@ RSA is an asymmetric encryption algorithm. "Asymmetric" means two different keys
 
 3. Decrypt the message using Raja’s private key.
 
+**Step 1: Raja Generate RSA Keys**  
 **rsa_keygen_raja.py**
 ```bash
 from Crypto.PublicKey import RSA
@@ -107,8 +110,9 @@ with open("raja_public.pem", "wb") as f:
 print("RSA key pair generated.")
 ```
 
-**Output:** Raja generate RSA keys [here]()
+See Raja generate RSA keys [here]()
 
+**Step 2: Encrypt Message with Raja’s Public Key**  
 **rsa_encryption.py**
 ```bash
 from Crypto.PublicKey import RSA
@@ -143,6 +147,7 @@ print("Encrypted:", base64.b64encode(ciphertext).decode())
 ![alt text](screenshots/rsa_encrypted.png)
 > ScA1VOwk5IhOOxCcNwVVM2HJDO2ni6oxAI8lyVXndS5bJSppDKUuQ+fwTVSQQbsaHTJXrXEnStV7EVK/cn1HqGCEmkg+aUZ3I+FY97upXRAaG92Lvh8Zgfy2HN4gZofbcrGvdMlniGAUszP5M2wcjtO4e2IbswKNTf0uaJrUIqZn3eNMFSqArrMAo4eIoAoJ3f61jIkeUTJB8sJHvzVXkVgcjFY7zLlU+sg3Q0FAqm8Ipi6nKQbyx3JPWMub/aZtZpZER11ThEQfw8+xFKBvaiLlG258VajrCReT8dgseYCeDeCpN3JG90uXP35K0aQ6P+sJysjO1UZTDx0cTYp4NA==
 
+**Step 3: Decrypt Message with Raja’s Private Key**  
 **rsa_decryption.py**
 ```bash
 from Crypto.PublicKey import RSA
@@ -176,6 +181,7 @@ SHA-256 is a hashing algorithm that generates a fixed-size hash (digest) from an
 
 2. Display the hash value.
 
+**Step 1: Hash a message with SHA-256**  
 **hashing.py**
 ```bash
 import hashlib
@@ -192,7 +198,7 @@ print("Hash of data1:", hash1)
 print("Hash of data2:", hash2)
 ```
 
-**Output**  
+**Step 2: Display the hash value**
 ```bash
 ➜ & C:/Users/nishd/AppData/Local/Programs/Python/Python311/python.exe c:/Users/nishd/Downloads/Crypto/Danish/Danish/Cryptography-Class/Assessments/2-Lab-Works-20%/Lab-Work-4/src/hashing.py
 Hash of data1: 2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824
@@ -256,3 +262,11 @@ try:
 except (ValueError, TypeError):
     print("Signature is INVALID. The file may have been tampered with.")
 ```
+
+**Output:**
+```bash
+➜ & C:/Users/nishd/AppData/Local/Programs/Python/Python311/python.exe c:/Users/nishd/Downloads/Crypto/Danish/Danish/Cryptography-Class/Assessments/2-Lab-Works-20%/Lab-Work-4/src/verify.py
+Signature is VALID. The file is authentic.
+```
+
+![alt text](screenshots/verify.png)
