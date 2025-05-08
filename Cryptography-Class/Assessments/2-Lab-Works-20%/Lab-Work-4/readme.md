@@ -492,6 +492,105 @@ except (ValueError, TypeError):
     print("Signature is INVALID. The file may have been tampered with.")
 ```
 
+<details>
+<summary>Coding explaination</summary>
+<br>
+
+**Import All the Necessary Libraries**
+```bash
+from Crypto.Signature import pkcs1_15
+from Crypto.PublicKey import RSA
+from Crypto.Hash import SHA256
+import base64
+```
+
+`pkcs1_15` : This handles the digital signature creation and verification using RSA.
+
+`RSA` : Lets you load the RSA public key.
+
+`SHA256` : Use this to hash the file contents (hashing is part of how digital signatures work).
+
+`base64` : Because the signature is saved in base64 format (it's safer to store/transmit that way).
+
+**Step 1: Raja's Public Key**
+```bash
+public_key_str = '''-----BEGIN PUBLIC KEY-----
+... Raja's key ...
+-----END PUBLIC KEY-----'''
+```
+
+> This is the public key Raja gave to me.
+
+> It’s a PEM-formatted string.
+
+> This key will be used to verify the signature.
+
+> Public key = verify; Private key = sign.
+
+**Step 2: Read the File to be Verified**
+```bash
+filename = r"...path...\digital_file.txt"
+with open(filename, "rb") as f:
+    file_data = f.read()
+```
+
+> Reading the actual file that Raja signed.
+
+> The rb means "read as bytes".
+
+> file_data will contain the full file content.
+
+**Step 3: Read the Signature**
+```bash
+with open(r"...path...\file_signature.txt", "r") as sig_file:
+    signature_b64 = sig_file.read()
+
+signature = base64.b64decode(signature_b64)
+```
+
+> First open the `.txt` file that contains the digital signature Raja made earlier.
+
+> Since it was saved in base64, decode it back to raw bytes.
+
+> Now `signature` is the actual binary signature I will use for verification.
+
+**Step 4: Create a Hash of the File**
+```bash
+hash = SHA256.new(file_data)
+```
+
+> Hash the file using SHA-256, just like Raja did when signing.
+
+> This hash must match what Raja signed for the signature to be valid.
+
+**Step 5: Import the Public Key**
+```bash
+public_key = RSA.import_key(public_key_str)
+```
+
+> This converts the PEM string of Raja’s public key into a usable RSA key object.
+
+**Step 6: Verify the Signature**
+```bash
+try:
+    pkcs1_15.new(public_key).verify(hash, signature)
+    print("Signature is VALID. The file is authentic.")
+except (ValueError, TypeError):
+    print("Signature is INVALID. The file may have been tampered with.")
+```
+
+`pkcs1_15.new(public_key).verify(...)` checks:
+
+- Was this file actually signed with Raja’s private key?
+
+- Is the file still untouched?
+
+If both are true → Signature is VALID.
+
+If not → Signature is INVALID (either someone tampered with the file, or the signature doesn't match).
+
+</details>
+
 **Output:**
 ```bash
 ➜ & C:/Users/nishd/AppData/Local/Programs/Python/Python311/python.exe c:/Users/nishd/Downloads/Crypto/Danish/Danish/Cryptography-Class/Assessments/2-Lab-Works-20%/Lab-Work-4/src/verify.py
