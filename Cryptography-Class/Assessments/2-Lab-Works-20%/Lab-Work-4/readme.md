@@ -235,6 +235,92 @@ ciphertext = cipher_rsa.encrypt(message)
 print("Encrypted:", base64.b64encode(ciphertext).decode())
 ```
 
+<details>
+<summary>Coding explaination</summary>
+<br>
+
+**Import Libraries:**
+```bash
+from Crypto.PublicKey import RSA
+from Crypto.Cipher import PKCS1_OAEP
+import base64
+```
+
+`from Crypto.PublicKey import RSA`  
+This lets us work with RSA keys (public/private).
+RSA = Rivest–Shamir–Adleman, a public-key encryption algorithm.
+
+`from Crypto.Cipher import PKCS1_OAEP`  
+This is a secure padding scheme used with RSA. It makes sure encryption is random and safe.
+It’s like wrapping your message in a strong bubble.
+
+`import base64`  
+Turns binary data into readable strings (so you can print/send it).
+Without this, encrypted stuff looks like unreadable binary garbage.
+
+**Step 1: Paste Raja's Public Key**
+```bash
+public_key_str = '''-----BEGIN PUBLIC KEY-----
+... Raja’s public key here ...
+-----END PUBLIC KEY-----'''
+```
+
+> This is the actual public key string Raja gave to me.
+
+> Public keys are used to encrypt messages.
+
+> Anyone can use this key to send Raja an encrypted message, but only he can decrypt it.
+
+**Step 1.1: Import the RSA Key**
+```bash
+public_key = RSA.import_key(public_key_str)
+```
+
+> This takes the key text above and turns it into a Python object that you can use to encrypt.
+
+> Think of this like loading the public key into your crypto tool.
+
+**Step 2: Create RSA Cipher Object with OAEP**
+```bash
+cipher_rsa = PKCS1_OAEP.new(public_key)
+```
+We're creating a cipher object that uses:  
+
+- Raja’s `public_key`
+
+- `PKCS1_OAEP` padding (for security)
+
+**Step 3: Prepare the Message**
+```bash
+message = b"This message is for Raja!"
+```
+
+> This is the message I encrypting.
+
+> The `b` in front means it’s a byte string, not a normal text string.
+
+**Step 3.1: Encrypt the Message**
+```bash
+ciphertext = cipher_rsa.encrypt(message)
+```
+
+> This actually encrypts the message using Raja’s public key.
+
+> Output: `ciphertext`, which is unreadable without base64.
+
+**Step 4: Encode for Sharing**
+```bash
+print("Encrypted:", base64.b64encode(ciphertext).decode())
+```
+
+> `base64.b64encode(ciphertext)`: Converts the encrypted binary into text.
+
+> `.decode()`: Converts the base64 object into a printable string.
+
+> Finally, it prints it out so I can copy and give it to Raja.
+
+</details>
+
 **Output:**
 ![alt text](screenshots/rsa_encrypted.png)
 > ScA1VOwk5IhOOxCcNwVVM2HJDO2ni6oxAI8lyVXndS5bJSppDKUuQ+fwTVSQQbsaHTJXrXEnStV7EVK/cn1HqGCEmkg+aUZ3I+FY97upXRAaG92Lvh8Zgfy2HN4gZofbcrGvdMlniGAUszP5M2wcjtO4e2IbswKNTf0uaJrUIqZn3eNMFSqArrMAo4eIoAoJ3f61jIkeUTJB8sJHvzVXkVgcjFY7zLlU+sg3Q0FAqm8Ipi6nKQbyx3JPWMub/aZtZpZER11ThEQfw8+xFKBvaiLlG258VajrCReT8dgseYCeDeCpN3JG90uXP35K0aQ6P+sJysjO1UZTDx0cTYp4NA==
@@ -289,6 +375,57 @@ hash2 = hashlib.sha256(data2.encode()).hexdigest()
 print("Hash of data1:", hash1)
 print("Hash of data2:", hash2)
 ```
+
+<details>
+<summary>Coding explaination</summary>
+<br>
+
+**Import the Hashing Library:**
+```bash
+import hashlib
+```
+
+> This brings in Python's built-in hashlib module.
+
+> `hashlib` supports many hash functions like `MD5`, `SHA-1`, `SHA-256`, etc.
+
+**Step 1: Define Input Strings**
+```bash
+data1 = "hello"
+data2 = "hello world"
+```
+
+> data1 and data2 are just two different pieces of text.
+
+> I will hash them separately to see how different the outputs are (even for small input changes).
+
+**Step 2: Hash the Inputs with SHA-256**
+```bash
+hash1 = hashlib.sha256(data1.encode()).hexdigest()
+hash2 = hashlib.sha256(data2.encode()).hexdigest()
+```
+
+> `data1.encode()`: Converts the string into bytes because hashing functions require binary input.
+
+> `hashlib.sha256(...)`: Creates a SHA-256 hash object using that byte input.
+
+> `.hexdigest()`: Converts the binary hash output into a hex string so it’s human-readable.
+
+So basically:
+
+> You're taking your input text → converting to bytes → hashing → converting result to hex string.
+
+**Step 3: Print the Hashes**
+```bash
+print("Hash of data1:", hash1)
+print("Hash of data2:", hash2)
+```
+
+> Just shows the hash of each string.
+
+> Showing how even a tiny change in the input causes a huge change in the hash (called the avalanche effect).
+
+</details>
 
 **Step 2: Display the hash value**
 ```bash
