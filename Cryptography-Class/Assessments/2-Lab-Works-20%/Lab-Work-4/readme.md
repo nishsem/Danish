@@ -348,7 +348,7 @@ plaintext = cipher_rsa.decrypt(ciphertext)
 
 print("Decrypted:", plaintext.decode())
 ```
-See Raja decrypt [here]()
+See Raja decrypt [here](https://github.com/Ha1qal/Raja-Haiqal/blob/master/Cryptography-Class/Assessments/Lab%20Works/Lab%204/lab%204.md#-implementation-1)
 
 ### Task 3: Hashing (SHA-256)
 What is SHA-256?  
@@ -413,7 +413,7 @@ hash2 = hashlib.sha256(data2.encode()).hexdigest()
 
 So basically:
 
-> You're taking your input text → converting to bytes → hashing → converting result to hex string.
+> Taking your input text → converting to bytes → hashing → converting result to hex string.
 
 **Step 3: Print the Hashes**
 ```bash
@@ -446,7 +446,7 @@ A digital signature is used to prove the authenticity of a message. The sender s
 2. Verify the signature using Raja's public key.
 
 **Step 1: Raja Signs the .txt File**  
-See how Raja signs the .txt file [here]()
+See how Raja signs the .txt file [here](https://github.com/Ha1qal/Raja-Haiqal/blob/master/Cryptography-Class/Assessments/Lab%20Works/Lab%204/lab%204.md#-implementation-3)
 
 **Step 2: Danish Verify the Signature**  
 **verify.py**
