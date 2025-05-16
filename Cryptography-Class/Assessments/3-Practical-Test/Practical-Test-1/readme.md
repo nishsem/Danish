@@ -290,7 +290,7 @@ That string didn’t make sense at first, so I analyzed it further. dCode sugges
 
 ![alt text](screenshots/identify2.png)
 
-So I clicked on the ROT Cipher tool on dCode and pasted the decoded text there. The tool listed all ROT shifts and found that ROT17 gave a readable sentence:
+So I clicked on the ROT Cipher tool on dCode and pasted the decoded text there. The tool listed all ROT shifts and found a readable sentence:
 
 ```bash
 Senang Je Soalan Ni Kaan
