@@ -208,11 +208,16 @@ cat .\id_ed25519.pub
 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICvlRgWC+NCbuICR31HSeRjKx0n588CPOELr9gX/ZILQ Ahmad Danish Haikal
 ```
 
+![alt text](screenshots/cat_key.png)
+
 2. Copying the output and then paste it to Kali Machine into the authorized_keys file in the .ssh directory
 
 ```bash
 vim authorized_keys
 ```
+
+![alt text](screenshots/vim_key.png)
+
 3. Then I made sure the permissions on Kali were right:
 ```bash
 chmod 700 ~/.ssh
@@ -227,6 +232,8 @@ After copying my public key, I tested the passwordless SSH login by running:
 ```bash
 ssh nish@192.168.43.136
 ```
+
+![alt text](screenshots/ssh.png)
 
 > Since the public key was authorized on Kali, I didn’t need to enter a password
 
