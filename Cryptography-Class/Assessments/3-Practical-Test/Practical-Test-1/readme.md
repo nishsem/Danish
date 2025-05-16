@@ -272,3 +272,22 @@ The tool suggested that the string was Base64 encoded. I decoded it using the sa
 
 ![alt text](screenshots/identify.png)
 
+Decoded result:
+```bash
+Jverex Av Jfrcre Ez Brre
+```
+![alt text](screenshots/base64.png)
+
+**Step 3: Identify Further Obfuscation**  
+That string didn’t make sense at first, so I analyzed it further. dCode suggested it could be a ROT cipher
+
+![alt text](screenshots/identify2.png)
+
+So I clicked on the ROT Cipher tool on dCode and pasted the decoded text there. The tool listed all ROT shifts and found that ROT17 gave a readable sentence:
+
+```bash
+Senang Je Soalan Ni Kaan
+```
+
+![alt text](screenshots/rot17.png)
+
