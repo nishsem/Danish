@@ -2,7 +2,7 @@ import hashlib
 
 # Input data
 data1 = "hello"
-data2 = "hello world"
+data2 = "hello "
 
 # Hash
 hash1 = hashlib.sha256(data1.encode()).hexdigest()
