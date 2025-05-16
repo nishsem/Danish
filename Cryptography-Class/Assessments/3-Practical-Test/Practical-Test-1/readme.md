@@ -291,3 +291,56 @@ Senang Je Soalan Ni Kaan
 
 ![alt text](screenshots/rot17.png)
 
+### Hash 2
+```bash
+7b77ca1e2b3e7228a82ecbc7ca0e6b52
+```
+
+**Hash Type:**
+- MD5 (-m 0)
+
+**Tools & Commands Used:**
+- Tool: Hashcat v6.2.6
+
+- Attack Mode: Dictionary attack (-a 0)
+
+- Wordlist: wordlist.txt (contains Sir Adli motivational phrases)
+
+- Command:
+```bash
+hashcat -m 0 -a 0 md5.txt wordlist.txt
+```
+
+**Cracking Results:**
+```bash
+7b77ca1e2b3e7228a82ecbc7ca0e6b52:Assalamualaikum Semua
+```
+
+![alt text](screenshots/hash2.png)
+
+### Hash 3
+```nginx
+e583cee9ab9d7626c970fd6e9938fcb2d06fbbd12f1c1a3c6902a215808c825c
+```
+
+**Hash Type:**
+- SHA-256 (-m 1400 in hashcat)
+
+**Tools & Commands Used:**
+- Tool: Hashcat v6.2.6
+
+- Attack Mode: Dictionary attack (-a 0)
+
+- Wordlist: wordlist.txt (contains Sir Adli motivational phrases)
+
+- Command:
+```bash
+hashcat -m 1400 -a 0 sha256.txt wordlist.txt
+```
+
+**Cracking Results:**
+```bash
+e583cee9ab9d7626c970fd6e9938fcb2d06fbbd12f1c1a3c6902a215808c825c:Begitulah Lumrah Kehidupan
+```
+![alt text](screenshots/hash3.png)
+
