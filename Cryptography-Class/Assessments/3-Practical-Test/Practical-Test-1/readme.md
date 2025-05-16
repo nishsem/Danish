@@ -97,3 +97,178 @@ Objective: Use GPG to encrypt and decrypt a file using the public and private ke
 ```bash
 echo "This file was encrypted by Nish (NWS23010014)" > message.txt
 ```
+
+![alt text](screenshots/message.png)
+
+**Step 2: Encrypt the File Using My Public Key**
+```bash
+gpg --encrypt --recipient "Danish" message.txt
+```
+
+![alt text](screenshots/encrypt.png)
+
+> This creates a new file: message.txt.gpg
+
+**Step 3: Decrypt the File Using My Private Key**
+```bash
+gpg --output decrypted_message.txt --decrypt message.txt.gpg
+```
+
+![alt text](screenshots/decrypt.png)
+
+> File Created: decrypted.txt
+
+> Contents: Same as original – “This is a secret message from Nish.”
+
+## Task 3: Sign and Verify a Message with GPG
+
+Objective: Digitally sign a message using your private key, and verify it using your public key.
+
+**Step 1: Create a Plaintext Message**
+```bash
+echo "I, Nish, declare this is my work." > signed_message.txt
+```
+
+**Step 2: Sign the Message**
+```bash
+gpg --clearsign signed_message.txt
+```
+
+![alt text](screenshots/signed.png)
+
+![alt text](screenshots/cat_asc.png)
+
+> This will create message.txt.asc – a signed version of my message in ASCII format.
+
+**Step 3: Verify the Signed Message**
+```bash
+gpg --verify signed_message.txt.asc
+```
+
+GPG will check the signature and show something like:
+```bash
+┌──(nish㉿NWS23010014)-[~/Practical-Test-1/Task-3]
+└─$ gpg --verify signed_message.txt.asc
+gpg: Signature made Fri 16 May 2025 06:34:18 PM +08
+gpg:                using RSA key 862235543AA4ECCCDF3ADC20C350E84E8CAFF6CB
+gpg: Good signature from "Ahmad Danish Haikal (Practical Test 1) <adanish.abdullah@student.gmi.edu.my>" [ultimate]
+gpg: WARNING: not a detached signature; file 'signed_message.txt' was NOT verified!
+```
+
+![alt text](screenshots/verify.png)
+
+> GPG shows a warning because the signature is embedded (not detached). However, the verification still works, and it confirms that the message was signed by me and hasn’t been altered.
+
+## Task 4: Configure Passwordless SSH Authentication
+
+Objective: Set up SSH key-based login to a test machine (can be localhost or your test VM) and verify you can SSH in without entering a password.
+
+**Step 1: Generate SSH Key Pair**
+```bash
+ssh-keygen -C "Ahmad Danish Haikal"
+```
+
+- When prompted for the file location to save the key, I just pressed Enter to accept the default path (~/.ssh/id_rsa).
+
+- When asked for a passphrase, I left it blank and pressed Enter twice so I wouldn’t need a password when logging in.
+
+```bash
+➜ ssh-keygen -C "Ahmad Danish Haikal"
+Generating public/private ed25519 key pair.
+Enter file in which to save the key (C:\Users\nishd/.ssh/id_ed25519):
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in C:\Users\nishd/.ssh/id_ed25519
+Your public key has been saved in C:\Users\nishd/.ssh/id_ed25519.pub
+The key fingerprint is:
+SHA256:IhdIeiacZNPQIuWmYa2t6K1Y7wDk+JoylOvwOWrjr9c Ahmad Danish Haikal
+The key's randomart image is:
++--[ED25519 256]--+
+| .*+.            |
+|.=o=o.           |
+|.+Bo+ .          |
+|=+o+   .         |
+|+o... o S        |
+|.=.  o .         |
+|+.= .            |
+|*Oo= E           |
+|XOO=o            |
++----[SHA256]-----+
+```
+
+**Step 2: Copy Public Key to Kali**  
+I manually copied the key by:
+
+1. Displaying my public key with:
+```bash
+cat .\id_ed25519.pub
+```
+
+```bash
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICvlRgWC+NCbuICR31HSeRjKx0n588CPOELr9gX/ZILQ Ahmad Danish Haikal
+```
+
+2. Copying the output and then paste it to Kali Machine into the authorized_keys file in the .ssh directory
+
+```bash
+vim authorized_keys
+```
+3. Then I made sure the permissions on Kali were right:
+```bash
+chmod 700 ~/.ssh
+```
+
+```bash
+chmod 600 ~/.ssh/authorized_keys
+```
+
+**Step 3: SSH into Kali without Password**  
+After copying my public key, I tested the passwordless SSH login by running:
+```bash
+ssh nish@192.168.43.136
+```
+
+> Since the public key was authorized on Kali, I didn’t need to enter a password
+
+To confirm I was on the Kali machine, I ran:
+```bash
+┌──(nish㉿NWS23010014)-[~]
+└─$ whoami
+nish
+```
+
+**Step 4: Create Your_Name.txt Remotely**  
+Once I confirmed the SSH connection worked without a password, I ran this command from my local machine to create a file on the Kali system:
+
+```bash
+┌──(nish㉿NWS23010014)-[~]
+└─$ echo "NWS23010014" > Ahmad_Danish_Haikal.txt
+```
+This command remotely created a file called Nish.txt in the home directory of the Kali machine, and it contains my student ID: NWS23010014.
+
+I double-checked the contents by logging in again and using cat:
+
+```bash
+┌──(nish㉿NWS23010014)-[~]
+└─$ cat Ahmad_Danish_Haikal.txt
+NWS23010014
+```
+
+> It displayed the correct ID, so the file creation over SSH worked perfectly.
+
+## Task 5: Hash Cracking Challenge
+
+Objective: Crack the provided hashes using various tools, techniques, and wordlists. The goal is to identify the type of hash, apply appropriate cracking or decoding methods, and retrieve the original plaintext.
+
+### Hash 1
+```nginx
+SnZlcmV4IEF2IEpmcmNyZSBFeiBCcnJl
+```
+**Step 1: Identify the Encoding**  
+I suspected this wasn’t a traditional hash like MD5 or SHA. So, I pasted it into [dCode's Cipher Identifier](https://www.dcode.fr/cipher-identifier) to analyze it.
+
+**Step 2: Recognize It's Base64**
+The tool suggested that the string was Base64 encoded. I decoded it using the same site.
+
+![alt text](screenshots/identify.png)
+
