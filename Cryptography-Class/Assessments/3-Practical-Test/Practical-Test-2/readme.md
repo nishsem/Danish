@@ -352,7 +352,7 @@ Alright, now comes the main grind (actually decrypting all the files). Here’s 
 
 - Decrypted the ciphertext to get raw padded plaintext.
 
--Ran my unpad function to strip off the padding and get the clean original data.
+- Ran my unpad function to strip off the padding and get the clean original data.
 
 - Saved that decrypted content back into a new file inside the decrypted/ folder — with the original filename (by removing .enc).
 
