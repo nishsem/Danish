@@ -2,7 +2,21 @@
 
 In this practical test, I analyzed a simulated ransomware file given by Sir Adli. The goal was to check the file’s integrity, understand how the ransomware encrypts files, find its encryption key, and write a program to decrypt the locked files.
 
-Below are the steps I followed to complete this task.
+Before doing anything with the simulated ransomware file, you must disable Windows Defender (a.k.a. Windows Security). If you don’t, it will detect the file as a threat and quarantine it immediately which is exactly what happened to me.
+
+Here’s what I did:
+
+- Go to Start > Windows Security > Virus & Threat Protection.
+
+- Click on "Manage Settings" under Virus & Threat Protection Settings.
+
+- Turn off Real-time Protection and other 3 options under Virus & Threat Protection Settings.
+
+![alt text](screenshots/off.png)
+
+> If you're running this in a VM or lab, it’s safe to do this. Don’t turn off Defender on your main machine unless you're 100% sure what you’re doing.
+
+Now that Windows Defender is out of the way, we can finally get to work without it ruining the party.
 
 ### Step 1: Verify the File Integrity Using Hash  
 First, I downloaded the file simulated_ransomware.zip that Sir give to us. To make sure the file wasn’t messed with or corrupted during the download, I checked its hash. This is the SHA-256 hash value:
@@ -26,7 +40,7 @@ SHA256          4BF1DA4E96EE6DD0306284C7F9CFE30F93113106843F2360052F8FEAF7B5578F
 This gave me a hash output. Luckily, both hashes matched perfectly, so I knew the file was legit and hadn’t been tampered with. This was important before moving forward with any analysis.
 
 ### Step 2: Extract and Run the Executable
-After verifying the zip file, I extracted it using 7-Zip and found the executable file inside. When I ran the .exe, it automatically created a folder called locked_files in the same directory. Inside this folder, there were three files named maklumat1.txt.enc, maklumat2.txt.enc, and maklumat3.txt.enc. These .enc files looked like encrypted versions of some text files, which is exactly what I expected from ransomware behavior which is locking files by encrypting them.
+After verifying the zip file, I extracted it using `WinRAR` and found the executable file inside. When I ran the `.exe`, it automatically created a folder called locked_files in the same directory. Inside this folder, there were three files named `maklumat1.txt.enc`, `maklumat2.txt.enc`, and `maklumat3.txt.enc`. These `.enc` files looked like encrypted versions of some text files, which is exactly what I expected from ransomware behavior which is locking files by encrypting them.
 
 ```powershell
 PS C:\Users\Nish\Desktop\Practical Test 2\locked_files> ls
@@ -63,14 +77,14 @@ UqfUf Øþu'ÉfV[(ÇO‘8‘|‘»½a6Ob‹?↨;´5↓yIqsFNîZÛ#S♂†³º�
 ![alt text](screenshots/enc.png)
 
 ### Step 3: Identify Programming Language and Packaging Tool
-To figure out what language and tool were used to build the ransomware, I used a Windows app called Detect It Easy. I loaded the `simulated_ransomware.exe` into it, and the app showed me the programming language and the packaging tool used.
+To figure out what language and tool were used to build the ransomware, I used a Windows app called [Detect It Easy](https://github.com/horsicq/Detect-It-Easy). I loaded the `simulated_ransomware.exe` into it, and the app showed me the programming language and the packaging tool used.
 
 ![alt text](screenshots/die.png)
 
 > From this, I confirmed the ransomware was made using Python and packaged with PyInstaller. This info is key because it tells me the binary is basically a bundled Python script, which means I can try to reverse engineer it back to Python code.
 
 ### Step 4: Extracting the EXE Using Pyinstxtractor-ng
-Next, I used pyinstxtractor-ng, a tool that extracts files bundled inside PyInstaller executables. Running the command on simulated_ransomware.exe gave me this output:
+Next, I used [pyinstxtractor-ng](https://github.com/pyinstxtractor/pyinstxtractor-ng?tab=readme-ov-file), a tool that extracts files bundled inside PyInstaller executables. Running the command on `simulated_ransomware.exe` gave me this output:
 ```powershell
 (env) PS C:\Users\Nish\Desktop\Practical Test 2> C:\Users\Nish\Downloads\pyinstxtractor-ng.exe .\simulated_ransomware.exe
 [+] Processing .\simulated_ransomware.exe
@@ -87,7 +101,7 @@ Next, I used pyinstxtractor-ng, a tool that extracts files bundled inside PyInst
 You can now use a python decompiler on the pyc files within the extracted directory
 ```
 
-This extraction created a folder named `simulated_ransomware.exe_extracted` containing `.pyc` files, including the main simulated_ransomware.pyc file.
+This extraction created a folder named `simulated_ransomware.exe_extracted` containing `.pyc` files, including the main `simulated_ransomware.pyc` file.
 
 ```powershell
 PS C:\Users\Nish\Desktop\Practical Test 2> ls
@@ -209,6 +223,12 @@ pip install uncompyle6
 C:\Users\Nish\Downloads\env\Scripts\uncompyle6.exe -o . .\simulated_ransomware.pyc
  ```
 
+> `C:\Users\Nish\Downloads\env\Scripts\uncompyle6.exe` : This is the path to the uncompyle6 executable inside my Python virtual environment (env).
+
+> `-o` : Means output directory. The `.` means you're telling it: "Save the decompiled .py file right here in the current folder."
+
+> `.\simulated_ransomware.pyc` : This is the input file which is the compiled Python bytecode I want to decompile.
+
 ![alt text](screenshots/uncompyle6.png)
 
 This gave me a new file called `simulated_ransomware.py` in the same directory. It’s now human-readable and I can analyze what’s going on inside.
@@ -325,7 +345,7 @@ os.makedirs(dec_folder, exist_ok=True) # Create decrypted/ if it’s not already
 Basically, this just sets up your workspace so when you decrypt files, you don’t accidentally overwrite or lose anything.
 
 ### Step 9: Implementing Padding Removal (Unpadding)
-So, after decrypting, the data still has some extra padding bytes at the end because of how AES works — it needs to work in blocks of 16 bytes. This padding is PKCS#7 style, meaning:
+So, after decrypting, the data still has some extra padding bytes at the end because of how AES works. It needs to work in blocks of 16 bytes. This padding is PKCS#7 style, meaning:
 
 - The last byte in the decrypted data tells you how many padding bytes were added.
 
@@ -344,17 +364,17 @@ This way, the decrypted content is clean, no extra junk at the end messing up th
 ### Step 10: Looping Through Encrypted Files and Decrypting
 Alright, now comes the main grind (actually decrypting all the files). Here’s how I did it step-by-step:
 
-- I grabbed every file in the locked_files/ folder that ends with .enc (that’s the encrypted files).
+- I grabbed every file in the `locked_files/` folder that ends with `.enc` (that’s the encrypted files).
 
 - For each file, I opened it in binary mode and read the ciphertext bytes.
 
-- Then, I created the AES cipher object using the key and ECB mode — just like the ransomware.
+- Then, I created the AES cipher object using the key and ECB mode. Just like the ransomware.
 
 - Decrypted the ciphertext to get raw padded plaintext.
 
 - Ran my unpad function to strip off the padding and get the clean original data.
 
-- Saved that decrypted content back into a new file inside the decrypted/ folder — with the original filename (by removing .enc).
+- Saved that decrypted content back into a new file inside the `decrypted/` folder with the original filename (by removing .enc).
 
 - Printed a message confirming which file got decrypted, so I could track progress.
 
@@ -381,7 +401,7 @@ for filename in os.listdir(enc_folder):
 ```
 
 ### Step 11: Results and Confirmation
-Boom! Ran the script and it successfully decrypted all files in locked_files/.
+Boom! Ran the script and it successfully decrypted all files in `locked_files/`.
 
 ```bash
 PS C:\Users\Nish\Desktop\Practical Test 2> python .\decryptor.py
@@ -406,7 +426,7 @@ Mode                 LastWriteTime         Length Name
 -a----         5/23/2025  10:07 PM            225 maklumat2.txt
 -a----         5/23/2025  10:07 PM            196 maklumat3.txt
 ```
-I checked the contents of the decrypted files using PowerShell’s Get-Content command.  
+I checked the contents of the decrypted files using PowerShell’s `Get-Content` command.  
 Here’s what I recovered:
 ```powershell
 PS C:\Users\Nish\Desktop\Practical Test 2\decrypted> Get-Content .\maklumat1.txt
