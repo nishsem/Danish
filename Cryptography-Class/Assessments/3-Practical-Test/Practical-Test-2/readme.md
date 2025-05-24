@@ -209,7 +209,7 @@ pip install uncompyle6
 C:\Users\Nish\Downloads\env\Scripts\uncompyle6.exe -o . .\simulated_ransomware.pyc
  ```
 
- ![alt text](screenshots/uncompyle6.png)
+![alt text](screenshots/uncompyle6.png)
 
 This gave me a new file called `simulated_ransomware.py` in the same directory. It’s now human-readable and I can analyze what’s going on inside.
 
@@ -280,26 +280,163 @@ KEY = sha256(KEY_STR.encode()).digest()[:16]
 
 So I fixed that manually in my analysis.
 
-### Step 7: Extracting the AES Key
-From the decompiled source code, I found this key derivation logic:
-```bash
-KEY_SUFFIX = "RahsiaLagi"
-KEY_STR = f"Bukan{KEY_SUFFIX}"
-KEY = sha256(KEY_STR.encode()).digest()[:16]
-```
+### Step 7: Understanding the Encryption Key
+Alright, so the ransomware locked the files using AES-128 in ECB mode. But the real question is: What key did it use?
 
-So I reconstructed the original string:
-```bash
-KEY_STR = "BukanRahsiaLagi"
-```
+Turns out, it’s not some random key, they cooked it by hashing a secret string with SHA-256 and then grabbed the first 16 bytes to make a 128-bit key.
 
-Then applied SHA-256 and took the first 16 bytes:
+The secret string? "BukanRahsiaLagi". Basically, the code combines "Bukan" + "RahsiaLagi" to get that.
+
+Here’s how you can recreate the same key in Python:
 ```bash
 from hashlib import sha256
 
-key = sha256("BukanRahsiaLagi".encode()).digest()[:16]
-print(key.hex())
+KEY_SUFFIX = "RahsiaLagi"
+KEY_STR = f"Bukan{KEY_SUFFIX}"  # "BukanRahsiaLagi"
+KEY = sha256(KEY_STR.encode()).digest()[:16]  # first 16 bytes of the hash
+```
+If you don’t wanna make a file, just run it as a one-liner right in your terminal or command prompt like this:
+```powershell
+python -c "from hashlib import sha256; print(sha256('BukanRahsiaLagi'.encode()).digest()[:16].hex())"
 ```
 
-This key will be used for **AES decryption (ECB mode)**.
+![alt text](screenshots/key.png)
 
+> This spits out the exact key the ransomware used to lock your files
+
+### Step 8: Setting Up the Decryptor Script
+Before we actually decrypt stuff, gotta prep where the decrypted files will go. So:
+
+- First, I made a folder called decrypted/ where the decrypted files will be saved.
+
+- The encrypted files live in locked_files/ and they all end with `.enc` (that’s how we know they’re locked).
+
+Here’s the Python code to make sure that decrypted folder exists (so it won’t throw errors if it’s missing):
+
+```bash
+import os
+
+enc_folder = "locked_files" # Where the locked/encrypted files are
+dec_folder = "decrypted"    # Where we wanna put the unlocked files
+
+os.makedirs(dec_folder, exist_ok=True) # Create decrypted/ if it’s not already there
+```
+
+Basically, this just sets up your workspace so when you decrypt files, you don’t accidentally overwrite or lose anything.
+
+### Step 9: Implementing Padding Removal (Unpadding)
+So, after decrypting, the data still has some extra padding bytes at the end because of how AES works — it needs to work in blocks of 16 bytes. This padding is PKCS#7 style, meaning:
+
+- The last byte in the decrypted data tells you how many padding bytes were added.
+
+- To get the original message, I gotta remove those padding bytes.
+
+So I wrote a simple function called `unpad` that does exactly that:
+
+```bash
+def unpad(data):
+    pad_len = data[-1]
+    return data[:-pad_len]
+```
+
+This way, the decrypted content is clean, no extra junk at the end messing up the file.
+
+### Step 10: Looping Through Encrypted Files and Decrypting
+Alright, now comes the main grind (actually decrypting all the files). Here’s how I did it step-by-step:
+
+- I grabbed every file in the locked_files/ folder that ends with .enc (that’s the encrypted files).
+
+- For each file, I opened it in binary mode and read the ciphertext bytes.
+
+- Then, I created the AES cipher object using the key and ECB mode — just like the ransomware.
+
+- Decrypted the ciphertext to get raw padded plaintext.
+
+-Ran my unpad function to strip off the padding and get the clean original data.
+
+- Saved that decrypted content back into a new file inside the decrypted/ folder — with the original filename (by removing .enc).
+
+- Printed a message confirming which file got decrypted, so I could track progress.
+
+Here’s the full loop code:
+```bash
+from Crypto.Cipher import AES
+
+for filename in os.listdir(enc_folder):
+    if filename.endswith(".enc"):
+        enc_path = os.path.join(enc_folder, filename)
+        with open(enc_path, "rb") as f:
+            ciphertext = f.read()
+        
+        cipher = AES.new(KEY, AES.MODE_ECB)
+        decrypted = cipher.decrypt(ciphertext)
+        plaintext = unpad(decrypted)
+
+        new_filename = filename.replace(".enc", "")
+        dec_path = os.path.join(dec_folder, new_filename)
+        with open(dec_path, "wb") as f:
+            f.write(plaintext)
+
+        print(f"[+] Decrypted: {filename} -> {new_filename}")
+```
+
+### Step 11: Results and Confirmation
+Boom! Ran the script and it successfully decrypted all files in locked_files/.
+
+```bash
+PS C:\Users\Nish\Desktop\Practical Test 2> python .\decryptor.py
+[+] Decrypted: maklumat1.txt.enc -> maklumat1.txt
+[+] Decrypted: maklumat2.txt.enc -> maklumat2.txt
+[+] Decrypted: maklumat3.txt.enc -> maklumat3.txt
+```
+
+![alt text](screenshots/decrypted.png)
+
+```powershell
+PS C:\Users\Nish\Desktop\Practical Test 2> cd .\decrypted\   
+PS C:\Users\Nish\Desktop\Practical Test 2\decrypted> ls
+
+
+    Directory: C:\Users\Nish\Desktop\Practical Test 2\decrypted
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-a----         5/23/2025  10:07 PM            282 maklumat1.txt
+-a----         5/23/2025  10:07 PM            225 maklumat2.txt
+-a----         5/23/2025  10:07 PM            196 maklumat3.txt
+```
+I checked the contents of the decrypted files using PowerShell’s Get-Content command.  
+Here’s what I recovered:
+```powershell
+PS C:\Users\Nish\Desktop\Practical Test 2\decrypted> Get-Content .\maklumat1.txt
+Assalamualaikum semua, pelajar kursus Cryptography semester 5.
+Keselamatan siber bergantung kepada kebijaksanaan anda dalam memahami kriptografi.
+Gunakan ilmu ini untuk melindungi data, sistem, dan masa depan teknologi.
+Jadilah perisai digital yang berintegriti dan berkemahiran.
+
+PS C:\Users\Nish\Desktop\Practical Test 2\decrypted> Get-Content .\maklumat2.txt
+Setiap algoritma yang anda pelajari hari ini adalah benteng pertahanan esok.
+Kuasa penyulitan (encryption) bukan hanya tentang kod, tetapi amanah dalam menjaga maklumat.
+Teruskan usaha, dunia digital menanti kepakaran anda!
+
+PS C:\Users\Nish\Desktop\Practical Test 2\decrypted> Get-Content .\maklumat3.txt
+Semoga ilmu yang dipelajari menjadi manfaat kepada semua.
+Gunakan kepakaran anda untuk kebaikan, bukan kemudaratan.
+Semoga berjaya di dunia dan akhirat!
+
+Adli, Lecturer Part Time, Feb-Mei 2025
+```
+
+No errors, no junk padding left. This confirms the key, mode, and unpadding logic are spot on.
+
+Mission accomplished for this ransomware decryptor.
+
+**Special thanks to Sir Adli. Not just for the inspiring final message in the decrypted files, but for guiding us through complex cryptography concepts and real-world security challenges. Because of his effort and patience, we’ve grown more skilled, confident, and security-aware (even if crypto wasn't everyone's favorite at first).**
+
+This practical test was more than just another assignment  it was a full-on simulation of a real-world ransomware case. We started by analyzing a suspicious .exe binary, reverse engineered it to uncover the encryption method and key derivation logic, and then successfully built a Python decryptor to recover the original files.
+
+Most importantly, this test showed how theoretical concepts like AES, hashing, and padding translate directly into real incident response scenarios. It was also a reminder of how attackers think and how defenders must be one step ahead.
+
+### Final Words
+Thanks again to Sir Adli for designing such a hands-on and insightful test. This experience boosted my confidence and understanding of how encryption and decryption work in practice, especially in the context of malware analysis.
