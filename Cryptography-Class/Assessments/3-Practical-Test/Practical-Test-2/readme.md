@@ -452,6 +452,16 @@ No errors, no junk padding left. This confirms the key, mode, and unpadding logi
 
 Mission accomplished for this ransomware decryptor.
 
+### Compiling Decryptor to .exe
+I used PyInstaller to turn decryptor.py into a Windows executable:
+```bash
+pip install pyinstaller
+pyinstaller --onefile decryptor.py
+```
+- The .exe file will be in the dist/ folder.
+
+- Moved `decryptor.exe` next to `locked_files/` and ran it to decrypt files works perfectly.
+
 **Special thanks to Sir Adli. Not just for the inspiring final message in the decrypted files, but for guiding us through complex cryptography concepts and real-world security challenges. Because of his effort and patience, we’ve grown more skilled, confident, and security-aware (even if crypto wasn't everyone's favorite at first).**
 
 This practical test was more than just another assignment  it was a full-on simulation of a real-world ransomware case. We started by analyzing a suspicious .exe binary, reverse engineered it to uncover the encryption method and key derivation logic, and then successfully built a Python decryptor to recover the original files.
